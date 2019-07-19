@@ -1,1 +1,68 @@
 @import "reset";
+
+$dark: #387E96;
+$grey: #8CA5AD;
+$light: #D1EAF3;
+$middleDarker: #ADD8E6;
+$middleLighter: #C5E7F3;
+
+.container {
+  max-width: 1280px;
+  margin: 0 auto;
+}
+
+.nav-top-wrapper {
+  position: fixed;
+  width: 100%;
+  background-color: $dark;
+  box-shadow:  0 0 10px rgba(0,0,0,0.5);
+}
+
+.nav-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 20px;
+
+  &__logo {
+    height: 60px;
+  }
+
+  &__create-card {
+    font-size: 20px;
+    padding: 10px 20px;
+    background-color: transparent;
+    border: 2px solid $light;
+    border-radius: 8px;
+    color: $light;
+  }
+}
+
+.cards {
+  box-sizing: border-box;
+  overflow: auto;
+  height: 100vh;
+  padding: 100px 20px 0;
+  background-color: $light;
+}
+
+.card-item {
+  position: relative;
+  box-sizing: border-box;
+  width: 250px;
+  height: 150px;
+  padding: 0 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: flex-start;
+  background-color: $middleDarker;
+
+  &__close {
+    cursor: pointer;
+    position: absolute;
+    top: 3px;
+    right: 5px;
+    width: 35px;
+  }
+}
