@@ -15,12 +15,33 @@
 
 <main class="cards container">
     <div class="card-item">
-        <img src="img/close-btn.png" alt="close" class="card-item__close">
+        <img src="img/close-btn.png" alt="close" class="close-btn">
         <p class="card-item__client-name">Gogi Doe</p>
         <p class="card-item__doctor">Dentist</p>
         <button class="card-item__more">Show more</button>
     </div>
 </main>
+
+<div class="new-card-wrapper">
+    <form class="new-card">
+        <img src="img/close-btn.png" alt="close" id="modalClose" class="close-btn">
+        <input class="new-card__text-input" type="text" placeholder="Your name">
+        <select name="goal" id="visitGoalSelect">
+            <option value="checkup">Regular health check</option>
+            <option value="sickness">I think I'm sick</option>
+            <option value="recheck">Doctor's reappointment</option>
+        </select>
+
+        <select name="doctor" id="docSelect">
+            <option disabled selected value> -- select doctor -- </option>
+            <option value="cardiologist">Cardiologist</option>
+            <option value="dentist">Dentist</option>
+            <option value="therapist">Therapist</option>
+        </select>
+
+        <input class="new-card__btn" type="submit" value="Create">
+    </form>
+</div>
 
 <script src="js/script.js"></script>
 </body>

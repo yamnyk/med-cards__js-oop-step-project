@@ -9,40 +9,44 @@ class Visit {
 		this.#_clientName = clientName;
 	}
 	
-	get name() {
-		return this.#_name;
-	}
-	
-	set name(value) {
-		this.#_name = value;
-	}
-	
-	get date() {
-		return this.#_date;
-	}
-	
-	set date(value) {
-		this.#_date = value;
-	}
-	
-	get clientName() {
-		return this.#_clientName;
-	}
-	set clientName(value) {
-		this.#_clientName = value;
-	}
+	static showModal (event) {
+		const modalBg = document.querySelector('.new-card-wrapper');
+		const docSelect = document.querySelector('#docSelect');
+		modalBg.style.display = 'flex';
+		
+		document.querySelector('#modalClose').onclick = () => {
+			modalBg.style.display = 'none';
+		};
+		
+		docSelect.addEventListener('change',  (e) => {
+			switch (e.currentTarget.value) {
+				case 'dentist':
+					Dantist.showFields();
+					break;
+				case 'therapist':
+					Therapist.showFields();
+					break;
+				case 'cardiologist':
+					Cardiologist.showFields();
+					break;
+			}
+		}, true);
+		
+	};
 }
 
 class Cardiologist extends Visit{
 	#_visitGoal;
 	#_normalPressure;
 	#_massIndex;
+	#_illneses;
 	
-	constructor (clientName, visitGoal = GOAL_REGULAR, normalPressure, massIndex) {
+	constructor (clientName, visitGoal = GOAL_CHECKUP, normalPressure, massIndex, illneses) {
 		super(DOCTOR_CARDIO, new Date(), clientName);
 		this.#_visitGoal = visitGoal;
 		this.#_normalPressure = normalPressure;
 		this.#_massIndex = massIndex;
+		this.#_illneses = illneses;
 	}
 	
 	get visitGoal() {
@@ -67,6 +71,13 @@ class Cardiologist extends Visit{
 	set massIndex(value) {
 		this.#_massIndex = value;
 	}
+	get illneses() {
+		return this.#_illneses;
+	}
+	
+	set illneses(value) {
+		this.#_illneses = value;
+	}
 }
 
 class Dantist extends Visit {
@@ -82,6 +93,10 @@ class Dantist extends Visit {
 	}
 	set lastVisit(value) {
 		this.#_lastVisit = value;
+	}
+	
+	static showFields() {
+		// console.log(Object.keys(this));
 	}
 }
 
