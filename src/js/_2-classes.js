@@ -1,12 +1,14 @@
 class Visit {
-	#_name;
+	#_docName;
 	#_date;
 	#_clientName;
+	#_visitGoal;
 	
-	constructor(name, date = new Date(), clientName = 'Anonumous') {
-		this.#_name = name;
+	constructor(docName, date = new Date(), clientName = 'Anonumous', visitGoal = GOAL_CHECKUP) {
+		this.#_docName = docName;
 		this.#_date = date;
 		this.#_clientName = clientName;
+		this.#_visitGoal = visitGoal;
 	}
 	
 	static showModal (event) {
@@ -37,14 +39,12 @@ class Visit {
 }
 
 class Cardiologist extends Visit{
-	#_visitGoal;
 	#_normalPressure;
 	#_massIndex;
 	#_illnesses;
 	
 	constructor (clientName, visitGoal = GOAL_CHECKUP, normalPressure, massIndex, illnesses) {
-		super(DOCTOR_CARDIO, new Date(), clientName);
-		this.#_visitGoal = visitGoal;
+		super(DOCTOR_CARDIO, new Date(), clientName, visitGoal);
 		this.#_normalPressure = normalPressure;
 		this.#_massIndex = massIndex;
 		this.#_illnesses = illnesses;
@@ -54,12 +54,14 @@ class Cardiologist extends Visit{
 class Dentist extends Visit {
 	#_lastVisit;
 	
-	constructor (lastVisit, clientName) {
-		super(DOCTOR_DANTIST, new Date(), clientName);
-		this.#_lastVisit = lastVisit
+	constructor (lastVisit, clientName, visitGoal = GOAL_CHECKUP) {
+		super(DOCTOR_DENTIST, new Date(), clientName, visitGoal);
+		this.#_lastVisit = new Date(lastVisit);
 	}
 	
 	static showFields(optionalFields) {
+		optionalFields.innerHTML = '';
+		
 		const lastVisit = document.createElement('input');
 		const lastVisitLabel = document.createElement('label');
 		lastVisit.type = 'date';
@@ -74,12 +76,25 @@ class Dentist extends Visit {
 }
 
 class Therapist extends Visit {
-	#_visitGoal;
 	#_age;
 	
-	constructor (visitGoal, age, clientName) {
-		super(DOCTOR_THERAPIST, new Date(), clientName);
-		this.#_visitGoal = visitGoal;
+	constructor (visitGoal = GOAL_CHECKUP, age, clientName) {
+		super(DOCTOR_THERAPIST, new Date(), clientName, visitGoal);
 		this.#_age = age;
+	}
+	
+	static showFields(optionalFields) {
+		optionalFields.innerHTML = '';
+		
+		const lastVisit = document.createElement('input');
+		const lastVisitLabel = document.createElement('label');
+		lastVisit.type = 'date';
+		lastVisit.placeholder = 'Last visit';
+		
+		lastVisitLabel.innerText = 'Last visit 2';
+		lastVisitLabel.dataset.optionalFrom= 'dentist';
+		lastVisitLabel.appendChild(lastVisit);
+		
+		optionalFields.appendChild(lastVisitLabel);
 	}
 }

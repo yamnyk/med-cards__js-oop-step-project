@@ -75,7 +75,8 @@ $middleLighter: #C5E7F3;
   display: flex;
   flex-direction: column;
   justify-content: space-evenly;
-  align-items: center;
+  //align-items: center;
+  padding: 0 40px;
 
   & > * {
     margin: 10px 0;
