@@ -19,15 +19,16 @@ class Visit {
 		};
 		
 		docSelect.addEventListener('change',  (e) => {
+			const optionalFieldsContainer = document.querySelector('.optional-fields');
 			switch (e.currentTarget.value) {
 				case 'dentist':
-					Dantist.showFields();
+					Dentist.showFields(optionalFieldsContainer);
 					break;
 				case 'therapist':
-					Therapist.showFields();
+					Therapist.showFields(optionalFieldsContainer);
 					break;
 				case 'cardiologist':
-					Cardiologist.showFields();
+					Cardiologist.showFields(optionalFieldsContainer);
 					break;
 			}
 		}, true);
@@ -39,48 +40,18 @@ class Cardiologist extends Visit{
 	#_visitGoal;
 	#_normalPressure;
 	#_massIndex;
-	#_illneses;
+	#_illnesses;
 	
-	constructor (clientName, visitGoal = GOAL_CHECKUP, normalPressure, massIndex, illneses) {
+	constructor (clientName, visitGoal = GOAL_CHECKUP, normalPressure, massIndex, illnesses) {
 		super(DOCTOR_CARDIO, new Date(), clientName);
 		this.#_visitGoal = visitGoal;
 		this.#_normalPressure = normalPressure;
 		this.#_massIndex = massIndex;
-		this.#_illneses = illneses;
-	}
-	
-	get visitGoal() {
-		return this.#_visitGoal;
-	}
-	
-	set visitGoal(value) {
-		this.#_visitGoal = value;
-	}
-	
-	get normalPressure() {
-		return this.#_normalPressure;
-	}
-	
-	set normalPressure(value) {
-		this.#_normalPressure = value;
-	}
-	
-	get massIndex() {
-		return this.#_massIndex;
-	}
-	set massIndex(value) {
-		this.#_massIndex = value;
-	}
-	get illneses() {
-		return this.#_illneses;
-	}
-	
-	set illneses(value) {
-		this.#_illneses = value;
+		this.#_illnesses = illnesses;
 	}
 }
 
-class Dantist extends Visit {
+class Dentist extends Visit {
 	#_lastVisit;
 	
 	constructor (lastVisit, clientName) {
@@ -88,15 +59,17 @@ class Dantist extends Visit {
 		this.#_lastVisit = lastVisit
 	}
 	
-	get lastVisit() {
-		return this.#_lastVisit;
-	}
-	set lastVisit(value) {
-		this.#_lastVisit = value;
-	}
-	
-	static showFields() {
-		// console.log(Object.keys(this));
+	static showFields(optionalFields) {
+		const lastVisit = document.createElement('input');
+		const lastVisitLabel = document.createElement('label');
+		lastVisit.type = 'date';
+		lastVisit.placeholder = 'Last visit';
+		
+		lastVisitLabel.innerText = 'Last visit';
+		lastVisitLabel.dataset.optionalFrom= 'dentist';
+		lastVisitLabel.appendChild(lastVisit);
+		
+		optionalFields.appendChild(lastVisitLabel);
 	}
 }
 
@@ -108,20 +81,5 @@ class Therapist extends Visit {
 		super(DOCTOR_THERAPIST, new Date(), clientName);
 		this.#_visitGoal = visitGoal;
 		this.#_age = age;
-	}
-	
-	get visitGoal() {
-		return this.#_visitGoal;
-	}
-	
-	set visitGoal(value) {
-		this.#_visitGoal = value;
-	}
-	
-	get age() {
-		return this.#_age;
-	}
-	set age(value) {
-		this.#_age = value;
 	}
 }
