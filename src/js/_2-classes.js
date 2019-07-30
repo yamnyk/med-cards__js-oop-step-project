@@ -49,6 +49,37 @@ class Cardiologist extends Visit{
 		this.#_massIndex = massIndex;
 		this.#_illnesses = illnesses;
 	}
+	
+	static showFields(optionalFields) {
+		optionalFields.innerHTML = '';
+		const wrap = document.createDocumentFragment();
+		
+		const normalPressure = document.createElement('input');
+		const massIndex = document.createElement('input');
+		const illnesses = document.createElement('input');
+		
+		normalPressure.placeholder = 'Normal pressure';
+		massIndex.type = 'number';
+		massIndex.placeholder = 'Mass index';
+		illnesses.placeholder = 'Enter your illnesses';
+		
+		massIndex.setAttribute('required', true);
+		normalPressure.setAttribute('required', true);
+		
+		normalPressure.classList.add('new-card__text-input');
+		massIndex.classList.add('new-card__text-input');
+		illnesses.classList.add('new-card__text-input');
+		
+		wrap.appendChild(normalPressure);
+		wrap.appendChild(massIndex);
+		wrap.appendChild(illnesses);
+		
+		normalPressure.dataset.optionalFrom= 'dentist';
+		massIndex.dataset.optionalFrom= 'dentist';
+		illnesses.dataset.optionalFrom= 'dentist';
+		
+		optionalFields.appendChild(wrap);
+	}
 }
 
 class Dentist extends Visit {
@@ -66,6 +97,8 @@ class Dentist extends Visit {
 		const lastVisitLabel = document.createElement('label');
 		lastVisit.type = 'date';
 		lastVisit.placeholder = 'Last visit';
+		lastVisit.setAttribute("required","true");
+		lastVisit.classList.add('new-card__text-input');
 		
 		lastVisitLabel.innerText = 'Last visit';
 		lastVisitLabel.dataset.optionalFrom= 'dentist';
@@ -86,15 +119,14 @@ class Therapist extends Visit {
 	static showFields(optionalFields) {
 		optionalFields.innerHTML = '';
 		
-		const lastVisit = document.createElement('input');
-		const lastVisitLabel = document.createElement('label');
-		lastVisit.type = 'date';
-		lastVisit.placeholder = 'Last visit';
+		const age = document.createElement('input');
 		
-		lastVisitLabel.innerText = 'Last visit 2';
-		lastVisitLabel.dataset.optionalFrom= 'dentist';
-		lastVisitLabel.appendChild(lastVisit);
+		age.type = 'number';
+		age.placeholder = 'Age';
 		
-		optionalFields.appendChild(lastVisitLabel);
+		age.dataset.optionalFrom= 'dentist';
+		age.classList.add('new-card__text-input');
+		
+		optionalFields.appendChild(age);
 	}
 }
