@@ -11,9 +11,16 @@ class Visit {
 		this.#_visitGoal = visitGoal;
 	}
 	
+	static generateId () {
+		return `f${(+new Date).toString(16)}`;
+	}
+	
 	static showModal (event) {
 		const modalBg = document.querySelector('.new-card-wrapper');
 		const docSelect = document.querySelector('#docSelect');
+		const optionalFieldsContainer = document.querySelector('.optional-fields');
+		const cardForm = document.querySelector('.new-card');
+		
 		modalBg.style.display = 'flex';
 		
 		document.querySelector('#modalClose').onclick = () => {
@@ -21,7 +28,6 @@ class Visit {
 		};
 		
 		docSelect.addEventListener('change',  (e) => {
-			const optionalFieldsContainer = document.querySelector('.optional-fields');
 			switch (e.currentTarget.value) {
 				case 'dentist':
 					Dentist.showFields(optionalFieldsContainer);
@@ -35,16 +41,44 @@ class Visit {
 			}
 		}, true);
 		
+		cardForm.addEventListener('submit', (event) => {
+			event.preventDefault();
+			
+			switch (docSelect.value) {
+				case 'dentist':
+					const newDentistVisit = new Dentist(
+						document.querySelector('#lastVisit').value,
+						document.querySelector('#clientName').value,
+						document.querySelector('#visitGoalSelect').value
+					);
+					cardForm.reset();
+					Visit.saveToStorage(newDentistVisit);
+					break;
+				case 'therapist':
+					break;
+				case 'cardiologist':
+					break;
+			}
+		})
+		
 	};
+	
+	static saveToStorage(object) {
+		const storage = JSON.parse(localStorage.getItem('visits')) || [];
+		storage.push(object);
+		localStorage.setItem('visits', JSON.stringify(storage));
+	}
 }
 
 class Cardiologist extends Visit{
+	id;
 	#_normalPressure;
 	#_massIndex;
 	#_illnesses;
 	
 	constructor (clientName, visitGoal = GOAL_CHECKUP, normalPressure, massIndex, illnesses) {
 		super(DOCTOR_CARDIO, new Date(), clientName, visitGoal);
+		this.id = Visit.generateId();
 		this.#_normalPressure = normalPressure;
 		this.#_massIndex = massIndex;
 		this.#_illnesses = illnesses;
@@ -74,19 +108,19 @@ class Cardiologist extends Visit{
 		wrap.appendChild(massIndex);
 		wrap.appendChild(illnesses);
 		
-		normalPressure.dataset.optionalFrom= 'dentist';
-		massIndex.dataset.optionalFrom= 'dentist';
-		illnesses.dataset.optionalFrom= 'dentist';
+		optionalFields.dataset.optionalFrom= 'cardiologist';
 		
 		optionalFields.appendChild(wrap);
 	}
 }
 
 class Dentist extends Visit {
+	id;
 	#_lastVisit;
 	
 	constructor (lastVisit, clientName, visitGoal = GOAL_CHECKUP) {
 		super(DOCTOR_DENTIST, new Date(), clientName, visitGoal);
+		this.id = Visit.generateId();
 		this.#_lastVisit = new Date(lastVisit);
 	}
 	
@@ -96,23 +130,26 @@ class Dentist extends Visit {
 		const lastVisit = document.createElement('input');
 		const lastVisitLabel = document.createElement('label');
 		lastVisit.type = 'date';
+		lastVisit.id = 'lastVisit';
 		lastVisit.placeholder = 'Last visit';
 		lastVisit.setAttribute("required","true");
 		lastVisit.classList.add('new-card__text-input');
 		
 		lastVisitLabel.innerText = 'Last visit';
-		lastVisitLabel.dataset.optionalFrom= 'dentist';
 		lastVisitLabel.appendChild(lastVisit);
 		
+		optionalFields.dataset.optionalFrom = 'dentist';
 		optionalFields.appendChild(lastVisitLabel);
 	}
 }
 
 class Therapist extends Visit {
+	id;
 	#_age;
 	
 	constructor (visitGoal = GOAL_CHECKUP, age, clientName) {
 		super(DOCTOR_THERAPIST, new Date(), clientName, visitGoal);
+		this.id = Visit.generateId();
 		this.#_age = age;
 	}
 	
@@ -123,9 +160,9 @@ class Therapist extends Visit {
 		
 		age.type = 'number';
 		age.placeholder = 'Age';
-		
-		age.dataset.optionalFrom= 'dentist';
 		age.classList.add('new-card__text-input');
+		
+		optionalFields.dataset.optionalFrom = 'therapist';
 		
 		optionalFields.appendChild(age);
 	}
