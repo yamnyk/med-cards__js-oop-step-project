@@ -11,10 +11,6 @@ class Visit {
 		this.#_visitGoal = visitGoal;
 	}
 	
-	static generateId () {
-		return `f${(+new Date).toString(16)}`;
-	}
-	
 	static showModal (event) {
 		const modalBg = document.querySelector('.new-card-wrapper');
 		const docSelect = document.querySelector('#docSelect');
@@ -52,7 +48,7 @@ class Visit {
 						document.querySelector('#visitGoalSelect').value
 					);
 					cardForm.reset();
-					Visit.saveToStorage(newDentistVisit);
+					Utils.saveToStorage(newDentistVisit);
 					break;
 				case 'therapist':
 					break;
@@ -62,12 +58,6 @@ class Visit {
 		})
 		
 	};
-	
-	static saveToStorage(object) {
-		const storage = JSON.parse(localStorage.getItem('visits')) || [];
-		storage.push(object);
-		localStorage.setItem('visits', JSON.stringify(storage));
-	}
 }
 
 class Cardiologist extends Visit{
@@ -78,7 +68,7 @@ class Cardiologist extends Visit{
 	
 	constructor (clientName, visitGoal = GOAL_CHECKUP, normalPressure, massIndex, illnesses) {
 		super(DOCTOR_CARDIO, new Date(), clientName, visitGoal);
-		this.id = Visit.generateId();
+		this.id = Utils.generateId();
 		this.#_normalPressure = normalPressure;
 		this.#_massIndex = massIndex;
 		this.#_illnesses = illnesses;
@@ -120,7 +110,7 @@ class Dentist extends Visit {
 	
 	constructor (lastVisit, clientName, visitGoal = GOAL_CHECKUP) {
 		super(DOCTOR_DENTIST, new Date(), clientName, visitGoal);
-		this.id = Visit.generateId();
+		this.id = Utils.generateId();
 		this.#_lastVisit = new Date(lastVisit);
 	}
 	
@@ -149,7 +139,7 @@ class Therapist extends Visit {
 	
 	constructor (visitGoal = GOAL_CHECKUP, age, clientName) {
 		super(DOCTOR_THERAPIST, new Date(), clientName, visitGoal);
-		this.id = Visit.generateId();
+		this.id = Utils.generateId();
 		this.#_age = age;
 	}
 	
