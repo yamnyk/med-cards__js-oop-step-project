@@ -12,73 +12,6 @@ class Visit {
 		this.clientName = clientName;
 		this.visitGoal = visitGoal;
 	}
-	
-	static showModal (event) {
-		const modalBg = document.querySelector('.new-card-wrapper');
-		const docSelect = document.querySelector('#docSelect');
-		const optionalFieldsContainer = document.querySelector('.optional-fields');
-		const cardForm = document.querySelector('.new-card');
-		
-		modalBg.style.display = 'flex';
-		
-		document.querySelector('#modalClose').onclick = () => {
-			modalBg.style.display = 'none';
-		};
-		
-		docSelect.addEventListener('change',  (e) => {
-			switch (e.currentTarget.value) {
-				case DOCTOR_DENTIST:
-					Dentist.showFields(optionalFieldsContainer);
-					break;
-				case DOCTOR_THERAPIST:
-					Therapist.showFields(optionalFieldsContainer);
-					break;
-				case DOCTOR_CARDIOLOGIST:
-					Cardiologist.showFields(optionalFieldsContainer);
-					break;
-			}
-		}, true);
-		
-		cardForm.addEventListener('submit', (event) => {
-			event.preventDefault();
-			
-			switch (docSelect.value) {
-				case DOCTOR_DENTIST:
-					Utils.saveToStorage(
-						new Dentist(
-						document.querySelector('#lastVisit').value,
-						document.querySelector('#clientName').value,
-						document.querySelector('#visitGoalSelect').value
-						)
-					);
-					break;
-				case DOCTOR_THERAPIST:
-					Utils.saveToStorage(
-						new Therapist(
-						document.querySelector('#visitGoalSelect').value,
-						document.querySelector('#clientAge').value,
-						document.querySelector('#clientName').value
-						)
-					);
-					break;
-				case DOCTOR_CARDIOLOGIST:
-					Utils.saveToStorage(
-						new Cardiologist(
-						document.querySelector('#clientName').value,
-						document.querySelector('#visitGoalSelect').value,
-						document.querySelector('#normalPressure').value,
-						document.querySelector('#massIndex').value,
-						document.querySelector('#illnesses').value,
-						)
-					);
-					break;
-			}
-			cardForm.reset();
-			optionalFieldsContainer.innerHTML = '';
-			modalBg.style.display = 'none';
-		})
-		
-	};
 }
 
 class Cardiologist extends Visit{
@@ -87,7 +20,7 @@ class Cardiologist extends Visit{
 	illnesses;
 	
 	constructor (clientName, visitGoal = GOAL_CHECKUP, normalPressure, massIndex, illnesses) {
-		super(DOCTOR_CARDIO, new Date(), clientName, visitGoal);
+		super(DOCTOR_CARDIOLOGIST, new Date(), clientName, visitGoal);
 		this.normalPressure = normalPressure;
 		this.massIndex = massIndex;
 		this.illnesses = illnesses;

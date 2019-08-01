@@ -39,11 +39,33 @@ $middleLighter: #C5E7F3;
 }
 
 .cards {
-  box-sizing: border-box;
-  overflow: auto;
-  height: 100vh;
-  padding: 100px 20px 0;
-  background-color: $light;
+  display: flex;
+  justify-content: flex-start;
+  align-items: flex-start;
+  flex-wrap: wrap;
+
+  &-wrapper {
+    box-sizing: border-box;
+    overflow: auto;
+    height: 100vh;
+    padding: 100px 20px 0;
+    background-color: $light;
+  }
+
+  &__no-items {
+    font-family: sans-serif;
+    text-transform: uppercase;
+    font-size: 24px;
+    font-weight: 700;
+  }
+}
+
+.close-btn {
+  cursor: pointer;
+  position: absolute;
+  top: 3px;
+  right: 5px;
+  width: 35px;
 }
 
 .card-item {
@@ -57,16 +79,9 @@ $middleLighter: #C5E7F3;
   justify-content: space-around;
   align-items: flex-start;
   background-color: $middleDarker;
-
+  margin: 0 20px 20px 0;
 }
 
-.close-btn {
-  cursor: pointer;
-  position: absolute;
-  top: 3px;
-  right: 5px;
-  width: 35px;
-}
 
 .new-card {
   position: relative;
