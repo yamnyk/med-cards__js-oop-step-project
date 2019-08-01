@@ -1,14 +1,16 @@
 class Visit {
-	#_docName;
-	#_date;
-	#_clientName;
-	#_visitGoal;
+	id;
+	docName;
+	date;
+	clientName;
+	visitGoal;
 	
 	constructor(docName, date = new Date(), clientName = 'Anonumous', visitGoal = GOAL_CHECKUP) {
-		this.#_docName = docName;
-		this.#_date = date;
-		this.#_clientName = clientName;
-		this.#_visitGoal = visitGoal;
+		this.id = Utils.generateId();
+		this.docName = docName;
+		this.date = date;
+		this.clientName = clientName;
+		this.visitGoal = visitGoal;
 	}
 	
 	static showModal (event) {
@@ -25,13 +27,13 @@ class Visit {
 		
 		docSelect.addEventListener('change',  (e) => {
 			switch (e.currentTarget.value) {
-				case 'dentist':
+				case DOCTOR_DENTIST:
 					Dentist.showFields(optionalFieldsContainer);
 					break;
-				case 'therapist':
+				case DOCTOR_THERAPIST:
 					Therapist.showFields(optionalFieldsContainer);
 					break;
-				case 'cardiologist':
+				case DOCTOR_CARDIOLOGIST:
 					Cardiologist.showFields(optionalFieldsContainer);
 					break;
 			}
@@ -41,37 +43,54 @@ class Visit {
 			event.preventDefault();
 			
 			switch (docSelect.value) {
-				case 'dentist':
-					const newDentistVisit = new Dentist(
+				case DOCTOR_DENTIST:
+					Utils.saveToStorage(
+						new Dentist(
 						document.querySelector('#lastVisit').value,
 						document.querySelector('#clientName').value,
 						document.querySelector('#visitGoalSelect').value
+						)
 					);
-					cardForm.reset();
-					Utils.saveToStorage(newDentistVisit);
 					break;
-				case 'therapist':
+				case DOCTOR_THERAPIST:
+					Utils.saveToStorage(
+						new Therapist(
+						document.querySelector('#visitGoalSelect').value,
+						document.querySelector('#clientAge').value,
+						document.querySelector('#clientName').value
+						)
+					);
 					break;
-				case 'cardiologist':
+				case DOCTOR_CARDIOLOGIST:
+					Utils.saveToStorage(
+						new Cardiologist(
+						document.querySelector('#clientName').value,
+						document.querySelector('#visitGoalSelect').value,
+						document.querySelector('#normalPressure').value,
+						document.querySelector('#massIndex').value,
+						document.querySelector('#illnesses').value,
+						)
+					);
 					break;
 			}
+			cardForm.reset();
+			optionalFieldsContainer.innerHTML = '';
+			modalBg.style.display = 'none';
 		})
 		
 	};
 }
 
 class Cardiologist extends Visit{
-	id;
-	#_normalPressure;
-	#_massIndex;
-	#_illnesses;
+	normalPressure;
+	massIndex;
+	illnesses;
 	
 	constructor (clientName, visitGoal = GOAL_CHECKUP, normalPressure, massIndex, illnesses) {
 		super(DOCTOR_CARDIO, new Date(), clientName, visitGoal);
-		this.id = Utils.generateId();
-		this.#_normalPressure = normalPressure;
-		this.#_massIndex = massIndex;
-		this.#_illnesses = illnesses;
+		this.normalPressure = normalPressure;
+		this.massIndex = massIndex;
+		this.illnesses = illnesses;
 	}
 	
 	static showFields(optionalFields) {
@@ -81,6 +100,10 @@ class Cardiologist extends Visit{
 		const normalPressure = document.createElement('input');
 		const massIndex = document.createElement('input');
 		const illnesses = document.createElement('input');
+		
+		normalPressure.id = 'normalPressure';
+		massIndex.id = 'massIndex';
+		illnesses.id = 'illnesses';
 		
 		normalPressure.placeholder = 'Normal pressure';
 		massIndex.type = 'number';
@@ -105,13 +128,11 @@ class Cardiologist extends Visit{
 }
 
 class Dentist extends Visit {
-	id;
-	#_lastVisit;
+	lastVisit;
 	
 	constructor (lastVisit, clientName, visitGoal = GOAL_CHECKUP) {
 		super(DOCTOR_DENTIST, new Date(), clientName, visitGoal);
-		this.id = Utils.generateId();
-		this.#_lastVisit = new Date(lastVisit);
+		this.lastVisit = new Date(lastVisit);
 	}
 	
 	static showFields(optionalFields) {
@@ -134,19 +155,19 @@ class Dentist extends Visit {
 }
 
 class Therapist extends Visit {
-	id;
-	#_age;
+	age;
 	
 	constructor (visitGoal = GOAL_CHECKUP, age, clientName) {
 		super(DOCTOR_THERAPIST, new Date(), clientName, visitGoal);
-		this.id = Utils.generateId();
-		this.#_age = age;
+		this.age = age;
 	}
 	
 	static showFields(optionalFields) {
 		optionalFields.innerHTML = '';
 		
 		const age = document.createElement('input');
+		
+		age.id = 'clientAge';
 		
 		age.type = 'number';
 		age.placeholder = 'Age';
