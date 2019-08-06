@@ -97,18 +97,6 @@ $middleLighter: #C5E7F3;
     margin: 10px 0;
   }
 
-  &-wrapper {
-    display: none;
-    position: fixed;
-    justify-content: center;
-    align-items: center;
-    top: 0;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    background-color: rgba(0,0,0,0.5);
-  }
-
   &__text-input {
     outline: none;
     border: none;
@@ -120,4 +108,16 @@ $middleLighter: #C5E7F3;
     color: $dark;
     //margin: 20px 0;
   }
+}
+
+.modal-wrapper {
+  display: none;
+  position: fixed;
+  justify-content: center;
+  align-items: center;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background-color: rgba(0,0,0,0.5);
 }

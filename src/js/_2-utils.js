@@ -49,7 +49,7 @@ class Utils {
 	}
 	
 	static showModal (event) {
-		const modalBg = document.querySelector('.new-card-wrapper');
+		const modalBg = document.querySelector('.modal-wrapper');
 		const docSelect = document.querySelector('#docSelect');
 		const optionalFieldsContainer = document.querySelector('.optional-fields');
 		const cardForm = document.querySelector('.new-card');
@@ -121,8 +121,6 @@ class Utils {
 		const cardsContainer = document.querySelector(`.${cardContainerClassName}`);
 		let storage = JSON.parse(localStorage.getItem('visits')) || [];
 		
-		console.log(storage);
-		
 		cardsContainer.innerHTML = '';
 		
 		if(!storage.length) {
@@ -155,6 +153,13 @@ class Utils {
 			docName.innerText = this.constIntoName(card.docName);
 			showMore.innerText = 'Show more';
 			
+			showMore.onclick = (event) => {
+				const cardID = event.target.parentNode.dataset.cardId;
+				const visit = Utils.serializeIntoVisit(storage.find(el => el.id === cardID), card.docName);
+				console.log(visit);
+				Utils.showMoreModal(visit);
+			};
+			
 			cardNode.appendChild(closeBtn);
 			cardNode.appendChild(clientName);
 			cardNode.appendChild(docName);
@@ -186,5 +191,17 @@ class Utils {
 		localStorage.setItem('visits', JSON.stringify(storage));
 		
 		cardNode.remove();
+	}
+	
+	static showMoreModal(visit) {
+		const modalWrapper = document.createElement('div');
+		const modal = document.createElement('div');
+		
+		modalWrapper.classList.add('modal-wrapper');
+		
+		for (let field in visit) {
+			/*TODO: fields appearance */
+			// const label = document.createElement('')
+		}
 	}
 }
