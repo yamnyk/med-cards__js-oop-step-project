@@ -8,7 +8,7 @@ class Visit {
 	constructor(docName, date = new Date(), clientName = 'Anonumous', visitGoal = GOAL_CHECKUP) {
 		this.id = Utils.generateId();
 		this.docName = docName;
-		this.date = date;
+		this.date = new Date(date);
 		this.clientName = clientName;
 		this.visitGoal = visitGoal;
 	}
@@ -19,8 +19,8 @@ class Cardiologist extends Visit{
 	massIndex;
 	illnesses;
 	
-	constructor (clientName, visitGoal = GOAL_CHECKUP, normalPressure, massIndex, illnesses) {
-		super(DOCTOR_CARDIOLOGIST, new Date(), clientName, visitGoal);
+	constructor (clientName, visitGoal = GOAL_CHECKUP, normalPressure, massIndex, illnesses, date) {
+		super(DOCTOR_CARDIOLOGIST, date, clientName, visitGoal);
 		this.normalPressure = normalPressure;
 		this.massIndex = massIndex;
 		this.illnesses = illnesses;
@@ -63,8 +63,8 @@ class Cardiologist extends Visit{
 class Dentist extends Visit {
 	lastVisit;
 	
-	constructor (lastVisit, clientName, visitGoal = GOAL_CHECKUP) {
-		super(DOCTOR_DENTIST, new Date(), clientName, visitGoal);
+	constructor (lastVisit, clientName, visitGoal = GOAL_CHECKUP, date) {
+		super(DOCTOR_DENTIST, date, clientName, visitGoal);
 		this.lastVisit = new Date(lastVisit);
 	}
 	
@@ -90,8 +90,8 @@ class Dentist extends Visit {
 class Therapist extends Visit {
 	age;
 	
-	constructor (visitGoal = GOAL_CHECKUP, age, clientName) {
-		super(DOCTOR_THERAPIST, new Date(), clientName, visitGoal);
+	constructor (visitGoal = GOAL_CHECKUP, age, clientName, date) {
+		super(DOCTOR_THERAPIST, date, clientName, visitGoal);
 		this.age = age;
 	}
 	

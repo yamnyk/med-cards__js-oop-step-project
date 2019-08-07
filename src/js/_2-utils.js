@@ -51,6 +51,7 @@ class Utils {
 	static showModal (event) {
 		const modalBg = document.querySelector('.modal-wrapper');
 		const docSelect = document.querySelector('#docSelect');
+		const visitDate = document.querySelector('#visitDate');
 		const optionalFieldsContainer = document.querySelector('.optional-fields');
 		const cardForm = document.querySelector('.new-card');
 		
@@ -83,7 +84,8 @@ class Utils {
 						new Dentist(
 							document.querySelector('#lastVisit').value,
 							document.querySelector('#clientName').value,
-							document.querySelector('#visitGoalSelect').value
+							document.querySelector('#visitGoalSelect').value,
+							visitDate.value
 						)
 					);
 					break;
@@ -92,7 +94,8 @@ class Utils {
 						new Therapist(
 							document.querySelector('#visitGoalSelect').value,
 							document.querySelector('#clientAge').value,
-							document.querySelector('#clientName').value
+							document.querySelector('#clientName').value,
+							visitDate.value
 						)
 					);
 					break;
@@ -104,6 +107,7 @@ class Utils {
 							document.querySelector('#normalPressure').value,
 							document.querySelector('#massIndex').value,
 							document.querySelector('#illnesses').value,
+							visitDate.value
 						)
 					);
 					break;
@@ -135,6 +139,7 @@ class Utils {
 			const cardNode = document.createElement('div');
 			const clientName = document.createElement('p');
 			const docName = document.createElement('p');
+			const visitDate = document.createElement('p');
 			const showMore = document.createElement('button');
 			const closeBtn = document.createElement('img');
 			
@@ -148,10 +153,12 @@ class Utils {
 			clientName.classList.add('card-item__client-name');
 			docName.classList.add('card-item__doctor');
 			showMore.classList.add('card-item__more');
+			visitDate.classList.add('card-item__date');
 			
 			clientName.innerText = card.clientName;
 			docName.innerText = this.constIntoName(card.docName);
 			showMore.innerText = 'Show more';
+			visitDate.innerText = this.dateConverter(new Date(card.date));
 			
 			showMore.onclick = (event) => {
 				const cardID = event.target.parentNode.dataset.cardId;
@@ -179,11 +186,18 @@ class Utils {
 				return 'Therapist';
 			case DOCTOR_DENTIST:
 				return 'Dentist';
+			case GOAL_CHECKUP:
+				return 'Regular health check';
+			case GOAL_RECHECK:
+				return "Doctor's reappointment";
+			case GOAL_SICKNESS:
+				return "I think I'm sick";
+			default:
+				return constantVariable;
 		}
 	}
 	
 	static deleteCard(cardNode) {
-		
 		const cardID = cardNode.dataset.cardId;
 		let storage = JSON.parse(localStorage.getItem('visits'));
 		storage = storage.filter(card => card.id !== cardID);
@@ -196,12 +210,54 @@ class Utils {
 	static showMoreModal(visit) {
 		const modalWrapper = document.createElement('div');
 		const modal = document.createElement('div');
+		const closeBtn = document.createElement('img');
+		const clientName = document.createElement('h2');
+		const visitDate = document.createElement('span');
+		const docName = document.createElement('p');
+		
+		closeBtn.setAttribute('src', 'img/close-btn.png');
+		closeBtn.setAttribute('alt', 'close');
+		closeBtn.onclick = () => modalWrapper.style.display = 'none';
+		closeBtn.classList.add('close-btn');
+		
+		clientName.innerText = visit.clientName;
+		visitDate.innerText = this.dateConverter(visit.date);
+		docName.innerText = this.constIntoName(visit.docName);
 		
 		modalWrapper.classList.add('modal-wrapper');
+		modalWrapper.style.display = 'flex';
+		modal.classList.add('modal');
+		
+		modal.appendChild(closeBtn);
+		modal.appendChild(clientName);
+		modal.appendChild(visitDate);
+		modal.appendChild(docName);
 		
 		for (let field in visit) {
-			/*TODO: fields appearance */
-			// const label = document.createElement('')
+			if(field !== 'docName'
+				&& field !== 'date'
+				&& field !== 'clientName'
+				&& field !== 'id'
+			) {
+				const fieldWrap = document.createElement('div');
+				const label = document.createElement('span');
+				const fieldVal = document.createElement('p');
+				
+				label.innerText = field;
+				fieldVal.innerText = this.constIntoName(visit[field]);
+				
+				fieldWrap.appendChild(label);
+				fieldWrap.appendChild(fieldVal);
+				modal.appendChild(fieldWrap);
+			}
 		}
+		
+		modalWrapper.appendChild(modal);
+		
+		document.querySelector('.modal-wrapper').after(modalWrapper);
+	}
+	
+	static dateConverter(date) {
+		return `${date.getDate()}-${date.getMonth()}-${date.getFullYear()}`;
 	}
 }
