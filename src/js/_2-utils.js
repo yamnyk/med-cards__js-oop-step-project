@@ -172,6 +172,35 @@ class Utils {
 			cardNode.appendChild(docName);
 			cardNode.appendChild(showMore);
 			
+			cardNode.onmousedown = (e) => {
+				const cardY = cardNode.getBoundingClientRect().top + pageYOffset;
+				const cardX = cardNode.getBoundingClientRect().left + pageXOffset;
+				const shiftX = e.pageX - cardX;
+				const shiftY = e.pageY - cardY;
+				
+				function moveAt(e) {
+					cardNode.style.left = e.pageX - shiftX + 'px';
+					cardNode.style.top = e.pageY - shiftY + 'px';
+				}
+				
+				cardNode.style.position = 'absolute';
+				moveAt(e);
+				
+				document.onmousemove = function(e) {
+					moveAt(e);
+				};
+				
+				cardNode.onmouseup = function() {
+					document.onmousemove = null;
+					cardNode.onmouseup = null;
+				};
+				
+			};
+			
+			cardNode.ondragstart = function() {
+				return false;
+			};
+			
 			fragment.appendChild(cardNode);
 		});
 		
